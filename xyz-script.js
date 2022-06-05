@@ -28,7 +28,7 @@ const handleCloseMinu = () => {
   window.removeEventListener("message", handleReceiveMinuMessage);
 };
 
-window.minu = class minu {
+window.minu = class {
   
   boot({
     dev = false,
