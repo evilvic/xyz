@@ -1,7 +1,7 @@
-let minu_conf
+let minu_conf;
 
 const handleOpenMinu = () => {
-  const { m_con, m_class, m_site, m_tok } = minu_conf;
+  const { m_con, m_class, m_site, m_tok, m_dev, m_dom } = minu_conf;
   let m_space = document.getElementById(m_con);
   let m_fra = document.getElementById("m_fra");
   if (!m_fra) {
@@ -9,7 +9,9 @@ const handleOpenMinu = () => {
     m_fra.setAttribute("id", "m_fra");
     m_fra.setAttribute("class", m_class);
     m_fra.setAttribute("frameborder", "0");
-    m_fra.setAttribute("src", `${m_site}/?data=${m_tok}`);
+    let m_data = JSON.stringify({ m_tok, m_dev, m_dom });
+    console.log(m_site, m_data);
+    m_fra.setAttribute("src", `${m_site}/?data=${m_data}`);
     m_space.appendChild(m_fra);
   }
   window.addEventListener("message", handleReceiveMinuMessage);
@@ -31,7 +33,7 @@ const handleCloseMinu = () => {
 window.minu = class minu {
   
   boot({
-    dev = false,
+    dev: m_dev = false,
     token: m_tok,
     btn_id: m_btn,
     con_id: m_con,
@@ -42,9 +44,10 @@ window.minu = class minu {
       return;
     } else {
       minu_conf = {
-        m_site: dev ? "https://dev-benefi.minu.mx" : "https://benefi.minu.mx",
-        m_tok, m_btn, m_con, m_class,
+        m_site: `https://${m_dev ? "dev-" : ""}benefi.minu.mx`,
+        m_dev, m_tok, m_btn, m_con, m_class,
       }
+      if (m_dev) minu_conf["m_dom"] = getDevOrigin();
       const minu_btn = document.getElementById(m_btn);
       minu_btn.addEventListener("click", handleOpenMinu);
     }
@@ -61,3 +64,9 @@ window.minu = class minu {
   }
 
 };
+
+const getDevOrigin = () => {
+  const url = document.location.href;
+  const urlObj = new URL(url);
+  return urlObj.origin;
+}
