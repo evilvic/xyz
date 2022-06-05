@@ -10,7 +10,6 @@ const handleOpenMinu = () => {
     m_fra.setAttribute("class", m_class);
     m_fra.setAttribute("frameborder", "0");
     let m_data = JSON.stringify({ m_tok, m_dev, m_dom });
-    console.log(m_site, m_data);
     m_fra.setAttribute("src", `${m_site}/?data=${m_data}`);
     m_space.appendChild(m_fra);
   }
